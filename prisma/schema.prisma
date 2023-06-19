@@ -8,7 +8,7 @@ datasource db {
 }
 
 model user {
-  id               BigInt    @unique @default(autoincrement())
+  id               String    @unique @default(cuid())
   firstName        String
   lastName         String
   email            String    @unique
@@ -16,7 +16,6 @@ model user {
   image            String?
   role             Role      @default(user)
   registrationDate DateTime  @default(now())
-  lastLogin        DateTime  @updatedAt
   order            order[]
   address          address[]
   Review           Review[]
@@ -28,7 +27,7 @@ enum Role {
 }
 
 model product {
-  id              BigInt      @unique @default(autoincrement())
+  id              String      @unique @default(cuid())
   name            String
   description     String
   price           Float
@@ -41,13 +40,13 @@ model product {
 }
 
 model order {
-  id             BigInt      @unique @default(autoincrement())
+  id             String      @unique @default(cuid())
   orderStatus    status      @default(Pending)
   orderDate      DateTime    @default(now())
   totalAmount    Float
-  addressId      BigInt
+  addressId      String
   shippedAddress address     @relation(fields: [addressId], references: [id])
-  userId         BigInt
+  userId         String
   user           user        @relation(fields: [userId], references: [id])
   OrderItem      OrderItem[]
 }
@@ -61,11 +60,11 @@ enum status {
 }
 
 model address {
-  id      BigInt  @unique @default(autoincrement())
+  id      String  @unique @default(cuid())
   address String
   street  String
   city    String
-  userId  BigInt
+  userId  String
   user    user    @relation(fields: [userId], references: [id])
   order   order[]
 }
@@ -74,8 +73,8 @@ model OrderItem {
   id              String  @unique @default(cuid())
   quantity        Int
   priceAtPurchase Float
-  productId       BigInt
-  orderId         BigInt
+  productId       String
+  orderId         String
   product         product @relation(fields: [productId], references: [id])
   order           order   @relation(fields: [orderId], references: [id])
 }
@@ -84,8 +83,8 @@ model Review {
   id         String  @unique @default(cuid())
   rating     Int?
   comment    String?
-  productId  BigInt
-  customerId BigInt
+  productId  String
+  customerId String
   product    product @relation(fields: [productId], references: [id])
   customer   user    @relation(fields: [customerId], references: [id])
 }
