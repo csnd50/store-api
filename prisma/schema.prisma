@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,87 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model user {
+  id               BigInt    @unique @default(autoincrement())
+  firstName        String
+  lastName         String
+  email            String    @unique
+  password         String
+  image            String?
+  role             Role      @default(user)
+  registrationDate DateTime  @default(now())
+  lastLogin        DateTime  @updatedAt
+  order            order[]
+  address          address[]
+  Review           Review[]
+}
+
+enum Role {
+  user
+  admin
+}
+
+model product {
+  id              BigInt      @unique @default(autoincrement())
+  name            String
+  description     String
+  price           Float
+  quantityInStock Int         @default(0)
+  creationDate    DateTime    @default(now())
+  discount        Float?
+  image           String?
+  OrderItem       OrderItem[]
+  Review          Review[]
+}
+
+model order {
+  id             BigInt      @unique @default(autoincrement())
+  orderStatus    status      @default(Pending)
+  orderDate      DateTime    @default(now())
+  totalAmount    Float
+  addressId      BigInt
+  shippedAddress address     @relation(fields: [addressId], references: [id])
+  userId         BigInt
+  user           user        @relation(fields: [userId], references: [id])
+  OrderItem      OrderItem[]
+}
+
+enum status {
+  Pending
+  Shipped
+  Delivered
+  Cancelled
+  Returned
+}
+
+model address {
+  id      BigInt  @unique @default(autoincrement())
+  address String
+  street  String
+  city    String
+  userId  BigInt
+  user    user    @relation(fields: [userId], references: [id])
+  order   order[]
+}
+
+model OrderItem {
+  id              String  @unique @default(cuid())
+  quantity        Int
+  priceAtPurchase Float
+  productId       BigInt
+  orderId         BigInt
+  product         product @relation(fields: [productId], references: [id])
+  order           order   @relation(fields: [orderId], references: [id])
+}
+
+model Review {
+  id         String  @unique @default(cuid())
+  rating     Int?
+  comment    String?
+  productId  BigInt
+  customerId BigInt
+  product    product @relation(fields: [productId], references: [id])
+  customer   user    @relation(fields: [customerId], references: [id])
 }
