@@ -1,6 +1,6 @@
 Store API
 
-This is a Store API built using Nodejs , Express and Prisma.js. It provides various endpoints to perform operations related to user registration, product management, order creation, and user profile management.
+This is a RESTful API for a Store built with Node.js, Express, and Prisma.
 
 Getting Started
 
