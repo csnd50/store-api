@@ -7,7 +7,7 @@ Getting Started
 
         1. Install Node.js on your machine.
 
-        2. Clone this repository.
+        2. Clone this repository   https://github.com/csnd50/store-api.git
 
         3. Install the dependencies by running the following command in the project directory:
 
