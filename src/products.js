@@ -80,6 +80,25 @@ class Products{
             return res.status(500).json({Message:"Internal error"});
         }
     }
+    static async getProducts(req,res){
+        const products=await prisma.product.findMany();
+        return res.status(200).json({products});
+    }
+    static async getProduct(req,res){
+        try {
+            const {name}=req.body;
+            const product=await prisma.product.findMany({
+                where:{name}
+            });
+            
+            if(product.length==0){
+                return res.status(400).json({Message:"could not find the product"});
+            }
+            return res.status(200).json({product});
+        } catch (error) {
+            return res.status(400).json({Message:"Internal error"});
+        }
+}
 }
 
 module.exports={

@@ -18,7 +18,6 @@ model user {
   registrationDate DateTime  @default(now())
   order            order[]
   address          address[]
-  Review           Review[]
 }
 
 enum Role {
@@ -36,7 +35,6 @@ model product {
   discount        Float?
   image           String?
   OrderItem       OrderItem[]
-  Review          Review[]
 }
 
 model order {
@@ -46,7 +44,7 @@ model order {
   totalAmount    Float
   addressId      String
   shippedAddress address     @relation(fields: [addressId], references: [id])
-  userId         String
+  userId         String      
   user           user        @relation(fields: [userId], references: [id])
   OrderItem      OrderItem[]
 }
@@ -55,8 +53,6 @@ enum status {
   Pending
   Shipped
   Delivered
-  Cancelled
-  Returned
 }
 
 model address {
@@ -64,7 +60,7 @@ model address {
   address String
   street  String
   city    String
-  userId  String
+  userId  String  
   user    user    @relation(fields: [userId], references: [id])
   order   order[]
 }
@@ -77,14 +73,4 @@ model OrderItem {
   orderId         String
   product         product @relation(fields: [productId], references: [id])
   order           order   @relation(fields: [orderId], references: [id])
-}
-
-model Review {
-  id         String  @unique @default(cuid())
-  rating     Int?
-  comment    String?
-  productId  String
-  customerId String
-  product    product @relation(fields: [productId], references: [id])
-  customer   user    @relation(fields: [customerId], references: [id])
 }
