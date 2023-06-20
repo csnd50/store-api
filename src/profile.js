@@ -1,63 +1,66 @@
 const { PrismaClient, Role, status } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
-class User{
-static async profile(req,res){
-try {
-    const { userId } = req.Payload;
-    const profile=await prisma.user.findUnique({
-        select:{
-            firstName:true,
-            lastName:true,
-            email:true,
-            image:true,
-            id:true,
-        },
-        where:{
-            id:userId,
-        },
-    });
-    if(!profile){
-        return res.status(500).json({Message:"user not found"});
-    }
-    return res.status(200).json({profile});
-} catch (error) {
-    console.log(error);
-    return res.status(500).json({Message:"Internal error"});
-}
-}
-static async updateProfile(req,res){
-    const{ userId }=req.Payload;
+class User {
+  static async profile(req, res) {
     try {
-        const {firstName,lastName,email,password}=req.body;
-        const user=await prisma.user.findUnique({
-            where:{id:userId},
-        })
-        const comparePassword=await bcrypt.compare(password,user.password);
-        if(!comparePassword){return res.status(500).json({Message:"Invalid password"});}
-        const updateProfile=await prisma.user.update({
-            data:{
-                firstName,
-                lastName,
-                email,
-            },
-            where:{id:userId},
-            select:{
-                id:true,
-                firstName:true,
-                lastName:true,
-                image:true,
-                email:true,
-            }
-        });
-        return res.status(200).json({Message:"profile update successfuly",updateProfile});
+      const { userId } = req.Payload;
+      const profile = await prisma.user.findUnique({
+        select: {
+          firstName: true,
+          lastName: true,
+          email: true,
+          image: true,
+          id: true,
+        },
+        where: {
+          id: userId,
+        },
+      });
+      if (!profile) {
+        return res.status(500).json({ Message: "user not found" });
+      }
+      return res.status(200).json({ profile });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({Message:"Internal error"});
+      console.log(error);
+      return res.status(500).json({ Message: "Internal error" });
     }
-
-}
-static async deleteProfile(req, res) {
+  }
+  static async updateProfile(req, res) {
+    const { userId } = req.Payload;
+    try {
+      const { firstName, lastName, email, password } = req.body;
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+      const comparePassword = await bcrypt.compare(password, user.password);
+      if (!comparePassword) {
+        return res.status(500).json({ Message: "Invalid password" });
+      }
+      const updateProfile = await prisma.user.update({
+        data: {
+          firstName,
+          lastName,
+          email,
+        },
+        where: { id: userId },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          image: true,
+          email: true,
+        },
+      });
+      return res
+        .status(200)
+        .json({ Message: "profile update successfuly", updateProfile });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ Message: "Internal error" });
+    }
+  }
+  static async deleteProfile(req, res) {
     const { userId } = req.Payload;
     try {
       const { email, password } = req.body;
@@ -106,9 +109,7 @@ static async deleteProfile(req, res) {
       return res.status(500).json({ Message: "Internal error" });
     }
   }
-  
-  
 }
-module.exports={
-    User
-}
+module.exports = {
+  User,
+};

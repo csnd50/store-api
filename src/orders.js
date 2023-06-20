@@ -221,13 +221,7 @@ try {
       return res.status(500).json({ Message: 'Internal error' });
     }
   }
-  
-  
-  
-  
-  
 }
-
 module.exports = {
   Order,
 };

@@ -22,7 +22,7 @@ class Registration {
         return res.status(400).json({ Message: "please confirm the password" });
       }
       const hashPassword = await bcrypt.hash(password, 10);
-       await prisma.user.create({
+      await prisma.user.create({
         data: {
           firstName,
           lastName,
@@ -31,9 +31,7 @@ class Registration {
         },
       });
 
-      return res
-        .status(200)
-        .json({ Message: "Account created successfully" });
+      return res.status(200).json({ Message: "Account created successfully" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ Message: "internal error" });
