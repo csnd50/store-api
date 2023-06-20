@@ -4,14 +4,23 @@ This is a Store API built using Nodejs , Express and Prisma.js. It provides vari
 Getting Started
     To run this API locally, follow these steps:
         1. Install Node.js on your machine.
+
         2. Clone this repository.
+
         3. Install the dependencies by running the following command in the project directory:
-            npm install
+
+           command : npm install
+
         4. Start the API server by running the following command
-            npm run devStart
+
+            command :npm run devStart
+
         5. Set your .env file:
+
             DATABASE_URL="your Database URL".
+
             SECERT_KEY="your secert-key".
+
         6. The API server will start running on port 3000.
 
 Endpoints
