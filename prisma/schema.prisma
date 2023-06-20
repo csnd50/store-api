@@ -43,8 +43,9 @@ model order {
   orderDate      DateTime    @default(now())
   totalAmount    Float
   addressId      String
+  canUpdate      Boolean     @default(true)
   shippedAddress address     @relation(fields: [addressId], references: [id])
-  userId         String      
+  userId         String
   user           user        @relation(fields: [userId], references: [id])
   OrderItem      OrderItem[]
 }
@@ -53,6 +54,7 @@ enum status {
   Pending
   Shipped
   Delivered
+  Canceled
 }
 
 model address {
@@ -60,7 +62,7 @@ model address {
   address String
   street  String
   city    String
-  userId  String  
+  userId  String
   user    user    @relation(fields: [userId], references: [id])
   order   order[]
 }

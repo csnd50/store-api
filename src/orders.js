@@ -171,6 +171,60 @@ try {
       return res.status(500).json({ message: "Internal error" });
     }
   }
+  static async cancelOrder(req, res) {
+    const { id } = req.params;
+    try {
+      const canceledOrder = await prisma.order.update({
+        where: { id },
+        data: { orderStatus: 'Canceled' },
+        include: {
+          OrderItem: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+  
+      if (!canceledOrder.canUpdate) {
+        return res.status(401).json({ Message: "You have already canceled the order" });
+      }
+  
+      await prisma.order.update({
+        where: { id },
+        data: { canUpdate: false },
+      });
+  
+      const canceledProducts = canceledOrder.OrderItem.map(async (item) => {
+        const updatedProduct = await prisma.product.update({
+          where: { id: item.product.id },
+          data: { quantityInStock: { increment: item.quantity } },
+        });
+  
+        return {
+          productId: updatedProduct.id,
+          quantityInStock: updatedProduct.quantityInStock,
+        };
+      });
+  
+      const productsWithUpdatedQuantity = await Promise.all(canceledProducts);
+  
+      return res.status(200).json({
+        Message: 'Order canceled successfully',
+        canceledOrder: {
+          orderId: canceledOrder.id,
+          canceledProducts: productsWithUpdatedQuantity,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ Message: 'Internal error' });
+    }
+  }
+  
+  
+  
+  
   
 }
 

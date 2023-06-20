@@ -38,3 +38,4 @@ app.put("/profile/update",Registration.checklogin,User.updateProfile);
 //14- Delete user account
 app.delete("/profile/delete",Registration.checklogin,User.deleteProfile);
 //15- Cancel an order
+app.put("/orders/cancel/:id",Registration.checklogin,Order.cancelOrder);
