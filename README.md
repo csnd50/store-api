@@ -209,6 +209,8 @@ This API utilizes the following dependencies:
 
     .Prisma
 
+    .Prisma
+
     .Other custom modules for registration, product management, order handling, and user profile management.
 
 Contributing
