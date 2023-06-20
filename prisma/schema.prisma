@@ -28,7 +28,7 @@ enum Role {
 
 model product {
   id              String      @unique @default(cuid())
-  name            String
+  name            String      @unique
   description     String
   price           Float
   quantityInStock Int         @default(0)
