@@ -1,17 +1,19 @@
 const express=require("express");
 const app =express();
 app.use(express.json());
+
 const {Registration}=require("./registration");
 const {Products}=require("./products")
 const{Order}=require("./orders");
 const{User}=require("./profile");
 const {Errors}=require("../inputErrors/registrationErrors");
-const {ErrorsProfile}=require("../inputErrors/profileErrors");
 const{ProductsErrors}=require("../inputErrors/productsErrors");
 const{OrdersErrors}=require("../inputErrors/ordersErrors");
+const upload = require("./multerConfig");
 const Port =3000;
 app.listen(Port,()=>{
     console.log(`app listening on port ${Port}`);
+
 })
 //1- signUp
 app.post("/signup",Errors.signUp,Registration.signUp);
@@ -38,8 +40,9 @@ app.get('/orders/:id',Registration.checklogin,Order.getSpecificOrder);
 //12- Get user profile
 app.get("/profile",Registration.checklogin,User.profile);
 //13- Update user profile
-app.put("/profile/update",Registration.checklogin,ErrorsProfile.updateProfile,User.updateProfile);
+app.put("/profile/update",Registration.checklogin,User.updateProfile);
 //14- Delete user account
 app.delete("/profile/delete",Registration.checklogin,Errors.login,User.deleteProfile);
 //15- Cancel an order
 app.put("/orders/cancel/:id",Registration.checklogin,Order.cancelOrder);
+
