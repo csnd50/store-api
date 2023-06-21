@@ -6,8 +6,6 @@ class Order {
     try {
       const { totalAmount, address, items } = req.body;
       const { userId } = req.Payload;
-      console.log(userId);
-
       // Create the address in the database
       const createdAddress = await prisma.address.create({
         data: {
@@ -86,7 +84,6 @@ class Order {
   }
   static async getOrders(req,res){
     const { userId } = req.Payload;
-    console.log(userId);
 try {
     const orders=await prisma.order.findMany({
 
@@ -131,7 +128,6 @@ try {
   static async getSpecificOrder(req, res) {
     const { id } = req.params;
     const { userId } = req.Payload;
-    console.log(userId,id);
   
     try {
       const order = await prisma.order.findUnique({
@@ -173,6 +169,10 @@ try {
   }
   static async cancelOrder(req, res) {
     const { id } = req.params;
+    const find=await prisma.order.findUnique({where:{id}});
+    if(!find){
+      return res.status(400).json({Message:"Invalid id"});
+    }
     try {
       const canceledOrder = await prisma.order.update({
         where: { id },

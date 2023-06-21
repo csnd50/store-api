@@ -4,9 +4,6 @@ const prisma = new PrismaClient();
 class Products {
   static async addProduct(req, res) {
     const { name, description, price, quantityInStock } = req.body;
-    if (!name || !description || !price || !quantityInStock) {
-      return res.status(400).json({ Message: "enter all fields" });
-    }
     const item = await prisma.product.findUnique({
       where: { name },
     });

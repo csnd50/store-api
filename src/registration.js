@@ -7,6 +7,7 @@ const secertkey = process.env.SECERT_KEY;
 class Registration {
   static async signUp(req, res) {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
+
     const isExists = await prisma.user.findUnique({
       where: {
         email,
@@ -70,6 +71,9 @@ class Registration {
   }
   static async checklogin(req, res, next) {
     const headers = req.headers.authorization;
+    if(!headers){
+      return res.status(400).json({ message: "please put the token in the headers as Bearer" });
+    }
     if (headers) {
       const [bearer, token] = headers.split(" ");
       try {

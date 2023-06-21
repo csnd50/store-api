@@ -63,7 +63,7 @@ class User {
   static async deleteProfile(req, res) {
     const { userId } = req.Payload;
     try {
-      const { email, password } = req.body;
+      const { password } = req.body;
       const user = await prisma.user.findUnique({
         where: { id: userId },
         include: {
