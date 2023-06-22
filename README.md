@@ -29,6 +29,8 @@ Getting Started
 Endpoints
 The API provides the following endpoints:
 
+Please keep in mind that for each endpoint, there will be clear instructions on how to send the required information.(^_-)
+
 1. Sign Up
 
     Path: `/sign-up`
